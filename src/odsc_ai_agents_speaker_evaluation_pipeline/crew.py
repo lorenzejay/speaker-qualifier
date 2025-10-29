@@ -137,7 +137,7 @@ class OdscAiAgentsSpeakerEvaluationPipelineCrew:
         else:
             return (
                 True,
-                "The answer relevance score is low. The answer_relevance_score  is {answer_relevance_score}",
+                result.raw,
             )
 
     @task
