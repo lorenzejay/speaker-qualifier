@@ -1,0 +1,24 @@
+[project]
+name = "odsc_ai_agents_speaker_evaluation_pipeline"
+version = "0.1.0"
+description = "odsc_ai_agents_speaker_evaluation_pipeline using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==0.203.1",
+    "exa-py>=2.0.0",
+]
+
+[project.scripts]
+odsc_ai_agents_speaker_evaluation_pipeline = "odsc_ai_agents_speaker_evaluation_pipeline.main:run"
+run_crew = "odsc_ai_agents_speaker_evaluation_pipeline.main:run"
+train = "odsc_ai_agents_speaker_evaluation_pipeline.main:train"
+replay = "odsc_ai_agents_speaker_evaluation_pipeline.main:replay"
+test = "odsc_ai_agents_speaker_evaluation_pipeline.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

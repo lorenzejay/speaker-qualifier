@@ -1,0 +1,86 @@
+---
+comprehensive_web_research:
+  description: "Conduct thorough web research about {candidate_name} across multiple
+    online platforms and sources to build a complete professional profile. \n\n**RESEARCH
+    TARGETS:**\n1. **LinkedIn Profile**: Professional experience, education, endorsements,
+    posts\n2. **GitHub**: Code repositories, AI/ML projects, contribution history
+    \ \n3. **Personal Website/Blog**: Technical articles, thought leadership content\n4.
+    **Conference Videos**: Speaking engagements, presentations, workshops\n5. **Research
+    Publications**: Papers on arXiv, Google Scholar, conference proceedings\n6. **Social
+    Media**: Twitter/X posts about AI, technical discussions\n7. **Company Websites**:
+    Team pages, project descriptions, case studies\n8. **News Articles**: Press coverage,
+    interviews, industry recognition\n9. **Podcast Appearances**: Technical discussions,
+    thought leadership\n10. **Open Source Contributions**: AI/ML libraries, tools,
+    frameworks\n\n**FOCUS AREAS:**\n- AI agents, autonomous systems, multi-agent systems
+    expertise\n- Machine learning, deep learning, NLP experience  \n- Speaking and
+    presentation history\n- Technical writing and thought leadership\n- Industry recognition
+    and credibility\n- Teaching or mentoring experience\n- Workshop facilitation skills\n\nExtract
+    and organize all relevant information that would help evaluate their suitability
+    for speaking at ODSC about AI agents."
+  expected_output: "A comprehensive professional profile containing: \n- **Background**:
+    Current role, company, education, years of experience\n- **Technical Expertise**:
+    Detailed breakdown of AI/ML skills, especially AI agents\n- **Public Presence**:
+    Speaking history, publications, social media influence  \n- **Credibility Indicators**:
+    Industry recognition, peer endorsements, media coverage\n- **Teaching Ability**:
+    Evidence of mentoring, training, or educational content creation\n- **Source Links**:
+    URLs to key profiles, repositories, articles, and presentations found"
+  agent: web_research_specialist
+evaluate_odsc_speaker_potential:
+  description: "Based on the comprehensive web research, evaluate the candidate's
+    suitability for speaking at ODSC about AI agents workshops. Create a comprehensive
+    scoring system (1-100) considering:\n\n**SCORING CRITERIA:**\n1. **AI Agents Expertise
+    (30 points)**: Direct experience with AI agents, autonomous systems, multi-agent
+    systems, LangChain, CrewAI, AutoGEN, or related technologies\n2. **Speaking Experience
+    (25 points)**: Conference presentations, webinars, workshops, podcast appearances,
+    or public speaking history\n3. **Thought Leadership (20 points)**: Publications,
+    articles, blog posts, social media presence, industry recognition in AI/ML\n4.
+    **Professional Experience (15 points)**: Years of experience, seniority, company
+    reputation in relevant fields\n5. **Workshop Suitability (10 points)**: Ability
+    to teach, mentor, lead hands-on sessions, or create educational content\n\n**EVALUATION
+    SOURCES:**\n- GitHub repositories and code quality\n- Speaking videos and presentation
+    skills\n- Technical blog posts and articles  \n- Open source contributions\n-
+    Industry recognition and awards\n- Peer endorsements and recommendations\n- Educational
+    content creation\n\nProvide detailed justification for each score and overall
+    recommendation."
+  expected_output: A numerical score (1-100) with detailed breakdown by criteria,
+    strengths and weaknesses analysis, and clear recommendation (Highly Recommended/Recommended/Not
+    Recommended) with reasoning
+  agent: odsc_speaker_evaluator
+  context:
+  - comprehensive_web_research
+generate_speaker_evaluation_report:
+  description: |-
+    Create a comprehensive professional report about the evaluated candidate that includes:
+
+    **REPORT STRUCTURE:**
+    1. **Executive Summary**: Overall score, recommendation, and key highlights
+    2. **Candidate Overview**: Name, current role, company, LinkedIn profile
+    3. **Scoring Breakdown**: Detailed scores for each criteria with explanations
+    4. **Strengths & Opportunities**: Key strengths and areas for potential improvement
+    5. **Recommended Workshop Topics**: Specific AI agents topics they could present on
+    6. **Next Steps**: Actionable recommendations for conference organizers
+
+    Format the report professionally with clear headings, bullet points, and emphasis on key decisions points.
+  expected_output: A professionally formatted speaker evaluation report with executive
+    summary, detailed analysis, scoring breakdown, and actionable recommendations
+    for ODSC conference organizers
+  agent: report_generator
+  context:
+  - comprehensive_web_research
+  - evaluate_odsc_speaker_potential
+send_report_to_slack:
+  description: "Send a simple, clean summary of the speaker evaluation to {slack_recipient_email}
+    on Slack. The message should be plain text without any markdown formatting to
+    avoid API errors.\n\nInclude only:\n1. Clear subject line: \"ODSC Speaker Evaluation
+    Results\"\n2. Candidate name and overall score \n3. Brief recommendation (Highly
+    Recommended/Recommended/Not Recommended)\n4. Top 2-3 key strengths \n5. Multiple
+    recommended workshop topics (3-4 specific topics based on their expertise)\n\nKeep
+    the message concise, professional, and under 700 characters to ensure reliable
+    delivery. Use simple text formatting only - no asterisks, backticks, or special
+    characters that could cause Slack API errors."
+  expected_output: Confirmation that a simple, plain-text speaker evaluation summary
+    has been successfully sent to the specified Slack recipient without formatting
+    errors
+  agent: slack_notifier
+  context:
+  - generate_speaker_evaluation_report
