@@ -1,6 +1,7 @@
 ---
 comprehensive_web_research:
-  description: "Conduct thorough web research about {candidate_name} across multiple
+  description:
+    "Conduct thorough web research about {candidate_name} across multiple
     online platforms and sources to build a complete professional profile. \n\n**RESEARCH
     TARGETS:**\n1. **LinkedIn Profile**: Professional experience, education, endorsements,
     posts\n2. **GitHub**: Code repositories, AI/ML projects, contribution history
@@ -17,7 +18,8 @@ comprehensive_web_research:
     and credibility\n- Teaching or mentoring experience\n- Workshop facilitation skills\n\nExtract
     and organize all relevant information that would help evaluate their suitability
     for speaking at ODSC about AI agents."
-  expected_output: "A comprehensive professional profile containing: \n- **Background**:
+  expected_output:
+    "A comprehensive professional profile containing: \n- **Background**:
     Current role, company, education, years of experience\n- **Technical Expertise**:
     Detailed breakdown of AI/ML skills, especially AI agents\n- **Public Presence**:
     Speaking history, publications, social media influence  \n- **Credibility Indicators**:
@@ -26,7 +28,8 @@ comprehensive_web_research:
     URLs to key profiles, repositories, articles, and presentations found"
   agent: web_research_specialist
 evaluate_odsc_speaker_potential:
-  description: "Based on the comprehensive web research, evaluate the candidate's
+  description:
+    "Based on the comprehensive web research, evaluate the candidate's
     suitability for speaking at ODSC about AI agents workshops. Create a comprehensive
     scoring system (1-100) considering:\n\n**SCORING CRITERIA:**\n1. **AI Agents Expertise
     (30 points)**: Direct experience with AI agents, autonomous systems, multi-agent
@@ -42,12 +45,14 @@ evaluate_odsc_speaker_potential:
     Industry recognition and awards\n- Peer endorsements and recommendations\n- Educational
     content creation\n\nProvide detailed justification for each score and overall
     recommendation."
-  expected_output: A numerical score (1-100) with detailed breakdown by criteria,
+  expected_output:
+    A numerical score (1-100) with detailed breakdown by criteria,
     strengths and weaknesses analysis, and clear recommendation (Highly Recommended/Recommended/Not
-    Recommended) with reasoning
+    Recommended) with reasoning. Also return the scores for each criteria in a structured format.
+    You should also return evidence for each criteria
   agent: odsc_speaker_evaluator
   context:
-  - comprehensive_web_research
+    - comprehensive_web_research
 generate_speaker_evaluation_report:
   description: |-
     Create a comprehensive professional report about the evaluated candidate that includes:
@@ -61,26 +66,30 @@ generate_speaker_evaluation_report:
     6. **Next Steps**: Actionable recommendations for conference organizers
 
     Format the report professionally with clear headings, bullet points, and emphasis on key decisions points.
-  expected_output: A professionally formatted speaker evaluation report with executive
+  expected_output:
+    A professionally formatted speaker evaluation report with executive
     summary, detailed analysis, scoring breakdown, and actionable recommendations
-    for ODSC conference organizers
+    for ODSC conference organizers.
+    Also pull relevant links from the web research for each criteria to support the evidence.
   agent: report_generator
   context:
-  - comprehensive_web_research
-  - evaluate_odsc_speaker_potential
+    - comprehensive_web_research
+    - evaluate_odsc_speaker_potential
 send_report_to_slack:
-  description: "Send a simple, clean summary of the speaker evaluation to {slack_recipient_email}
+  description:
+    "Send a simple, clean summary of the speaker evaluation to {slack_recipient_email}
     on Slack. The message should be plain text without any markdown formatting to
     avoid API errors.\n\nInclude only:\n1. Clear subject line: \"ODSC Speaker Evaluation
     Results\"\n2. Candidate name and overall score \n3. Brief recommendation (Highly
     Recommended/Recommended/Not Recommended)\n4. Top 2-3 key strengths \n5. Multiple
     recommended workshop topics (3-4 specific topics based on their expertise)\n\nKeep
     the message concise, professional, and under 700 characters to ensure reliable
-    delivery. Use simple text formatting only - no asterisks, backticks, or special
+    delivery. 6. Also include relevant links from the web research for each criteria to support the evidence of experiece Use simple text formatting only - no asterisks, backticks, or special
     characters that could cause Slack API errors."
-  expected_output: Confirmation that a simple, plain-text speaker evaluation summary
+  expected_output:
+    Confirmation that a simple, plain-text speaker evaluation summary
     has been successfully sent to the specified Slack recipient without formatting
-    errors
+    errors. Also include relevant links from the web research for each criteria to support the evidence of experiece.
   agent: slack_notifier
   context:
-  - generate_speaker_evaluation_report
+    - generate_speaker_evaluation_report

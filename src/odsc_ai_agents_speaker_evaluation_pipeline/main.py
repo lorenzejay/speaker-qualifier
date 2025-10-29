@@ -15,7 +15,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        "candidate_name": "lorenze jay hernandez",
+        "candidate_name": "Lorenze Jay ",
         "slack_recipient_email": "lorenze@crewai.com",
     }
     OdscAiAgentsSpeakerEvaluationPipelineCrew().crew().kickoff(inputs=inputs)

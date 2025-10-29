@@ -1,12 +1,27 @@
 import os
 
-from crewai import LLM
+from crewai import LLM, TaskOutput
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import ScrapeWebsiteTool, EXASearchTool
 
 
 from crewai_tools import CrewaiEnterpriseTools
+from pydantic import BaseModel
+
+
+class Score(BaseModel):
+    score: int
+    reasoning: str
+    evidence: list[str]
+
+
+class SpeakerEvaluationCriteria(BaseModel):
+    ai_agents_expertise: Score
+    speaking_experience: Score
+    thought_leadership: Score
+    professional_experience: Score
+    workshop_suitability: Score
 
 
 @CrewBase
@@ -108,11 +123,30 @@ class OdscAiAgentsSpeakerEvaluationPipelineCrew:
             markdown=False,
         )
 
+    def speaker_evaluation_guardrail(self, result: TaskOutput) -> tuple[bool, str]:
+        from opik.evaluation.metrics import AnswerRelevance
+
+        metric = AnswerRelevance(require_context=False)
+        answer_relevance_score = metric.score(result.expected_output, result.raw)
+        print(f"Answer relevance score: {answer_relevance_score}")
+        if answer_relevance_score.scoring_failed:
+            return (
+                False,
+                "The answer relevance score is too high. The answer_relevance_score  is {answer_relevance_score}",
+            )
+        else:
+            return (
+                True,
+                "The answer relevance score is low. The answer_relevance_score  is {answer_relevance_score}",
+            )
+
     @task
     def generate_speaker_evaluation_report(self) -> Task:
         return Task(
             config=self.tasks_config["generate_speaker_evaluation_report"],
             markdown=False,
+            guardrail=self.speaker_evaluation_guardrail,
+            output_pydantic=SpeakerEvaluationCriteria,
         )
 
     @task
@@ -120,7 +154,7 @@ class OdscAiAgentsSpeakerEvaluationPipelineCrew:
         return Task(
             config=self.tasks_config["send_report_to_slack"],
             markdown=False,
-            guardrail="ensure the message is sent to the slack recipient",
+            guardrail="ensure the message is sent to the slack recipient and the message includes relevant links from the web research for each criteria to support the evidence of experiece.",
         )
 
     @crew
