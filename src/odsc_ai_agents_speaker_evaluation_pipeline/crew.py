@@ -70,6 +70,7 @@ class OdscAiAgentsSpeakerEvaluationPipelineCrew:
     @agent
     def slack_notifier(self) -> Agent:
         enterprise_actions_tool = CrewaiEnterpriseTools(
+            enterprise_token=os.getenv("CREWAI_ENTERPRISE_TOOLS_TOKEN_LORENZE"),
             actions_list=[
                 "slack_get_user_by_email",
                 "slack_send_message",
