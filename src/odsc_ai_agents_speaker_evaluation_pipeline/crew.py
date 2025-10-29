@@ -119,6 +119,7 @@ class OdscAiAgentsSpeakerEvaluationPipelineCrew:
         return Task(
             config=self.tasks_config["send_report_to_slack"],
             markdown=False,
+            guardrail="ensure the message is sent to the slack recipient",
         )
 
     @crew
